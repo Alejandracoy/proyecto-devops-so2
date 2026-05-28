@@ -1,7 +1,27 @@
 version: '3.8'
+
 services:
+  # Tu aplicación
   mi-api:
     build: .
     ports:
       - "80:5000"
     restart: always
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://user:pass@db:5432/proyecto_db
+
+  # La Base de Datos (Requisito Obligatorio)
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: proyecto_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
