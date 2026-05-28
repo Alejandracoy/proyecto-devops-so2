@@ -1,0 +1,28 @@
+name: Deploy a AWS
+
+on:
+  push:
+    branches: [ main ] # Se activa cada vez que guardas cambios
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Ejecutar comandos en AWS vía SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            # Si la carpeta no existe, clona el proyecto
+            if [ ! -d "proyecto" ]; then
+              git clone https://github.com/${{ github.repository }} proyecto
+            fi
+            cd proyecto
+            git pull origin main
+            # Levanta la app con Docker Compose (Orquestación)
+            sudo docker compose up -d --build
