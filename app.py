@@ -7,7 +7,7 @@ app = Flask(__name__)
 def hello():
     return {
         "status": "success",
-        "message": "¡Proyecto de Alejandra Coy:) desplegado automáticamente!",
+        "message": "Ale:)",
         "team": "Proyecto Final SO2",
         "container_id": os.uname()[1]
     }
